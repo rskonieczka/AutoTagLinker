@@ -103,4 +103,4 @@ This plugin is released under the MIT License.
 
 ## Support
 
-For issues, feature requests, or contributions, please visit the [GitHub repository](https://github.com/yourusername/AutoTagLinker).
+NO :)
