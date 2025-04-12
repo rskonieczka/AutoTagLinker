@@ -18,32 +18,48 @@ AutoTagLinker is a plugin for the Pico CMS that automatically links tags within 
 
 ## Configuration
 
-Add the following configuration to your `config.yml` file:
+The configuration for AutoTagLinker is stored in the plugin's config.php file located at `plugins/AutoTagLinker/config.php`. The plugin comes with default settings, but you can modify them to suit your needs.
 
-```yaml
-AutoTagLinker:
-  enabled: true
-  tagPrefix: '#'  # Character used to identify tags (default: '#')
-  tagClass: 'auto-tag'  # CSS class applied to tag links
-  linkFormat: '?tags=%tag%'  # URL format for tag links (%tag% is replaced with the tag name)
-  caseSensitive: false  # Whether tag matching is case sensitive
-  excludedTags: []  # List of tags to exclude from auto-linking
-  excludedSections:  # Content sections to exclude from processing
-    - 'code'
-    - 'pre'
+```php
+return [
+    // List of words to be automatically linked to tag pages
+    'tags_to_link' => [
+        'AI', 'Ansible', 'Artisan', 'Bash', 'Cheatsheet', 'DNS', 'DevOps',
+        'Docker', 'Git', 'Google Ads', 'Kubernetes', 'LAMP', 'Laravel',
+        'Linux', 'Malware', 'Marketing', 'MySQL', 'PHP', 'Perl',
+        'Plugin', 'Python', 'SEO', 'SSL',
+        'Sport', 'Tailwind', 'WordPress', 'htaccess'
+    ],
+    // Maximum number of links per word (-1 for unlimited)
+    'links_per_word' => 3,
+    // URL pattern for links. Use $1 to reference the matched word
+    'tag_url_pattern' => '/tags?q=$1',
+    // Whether to process headers (h1, h2, etc.) for tag links
+    'process_headings' => false,
+    // Enable auto-tagging by default for all pages
+    'enable_by_default' => true,
+    // Whether tag matching should be case-sensitive
+    'case_sensitive' => false,
+    // Tags to be excluded from auto-linking
+    'exclude_tags' => [
+        // Add any tags you want to exclude here
+        // 'PHP',
+        // 'MySQL'
+    ]
+];
 ```
 
 ### Configuration Options
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `enabled` | Enable or disable the plugin | `true` |
-| `tagPrefix` | Character used to identify tags | `'#'` |
-| `tagClass` | CSS class applied to tag links | `'auto-tag'` |
-| `linkFormat` | URL format for tag links | `'?tags=%tag%'` |
-| `caseSensitive` | Whether tag matching is case sensitive | `false` |
-| `excludedTags` | List of tags to exclude from auto-linking | `[]` |
-| `excludedSections` | Content sections to exclude from processing | `['code', 'pre']` |
+| `tags_to_link` | List of words to be automatically linked to tag pages | Sample list of common tech tags |
+| `links_per_word` | Maximum number of links per word (-1 for unlimited) | `3` |
+| `tag_url_pattern` | URL pattern for links. Use $1 to reference the matched word | `/tags?q=$1` |
+| `process_headings` | Whether to process headers (h1, h2, etc.) for tag links | `false` |
+| `enable_by_default` | Enable auto-tagging by default for all pages | `true` |
+| `case_sensitive` | Whether tag matching should be case-sensitive | `false` |
+| `exclude_tags` | Tags to be excluded from auto-linking | `[]` |
 
 ## Usage
 
@@ -61,41 +77,20 @@ This is a post about <a href="?tags=technology" class="auto-tag">#technology</a>
 
 ## Advanced Usage
 
-### Custom Tag Formats
+### Disabling for Specific Pages
 
-You can customize how tags are identified and processed by adjusting the configuration:
-
-```yaml
-AutoTagLinker:
-  tagRegex: '/\#([a-zA-Z0-9_\-]+)/'  # Custom regex for identifying tags
-```
-
-### Tag Blacklist
-
-Prevent specific tags from being auto-linked:
+If you want to disable auto-tagging for specific pages, you can add the following metadata to the page:
 
 ```yaml
-AutoTagLinker:
-  excludedTags:
-    - 'nolink'
-    - 'private'
+---
+Title: My Page
+AutoTagLinker: false
+---
 ```
 
-### Styling Tag Links
+### Controlling Tag Processing
 
-You can style the auto-generated tag links using CSS:
-
-```css
-.auto-tag {
-  color: #3498db;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.auto-tag:hover {
-  text-decoration: underline;
-}
-```
+You can control which tags are processed by modifying the `tags_to_link` and `exclude_tags` arrays in the configuration.
 
 ## Compatibility
 
